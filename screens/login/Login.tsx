@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	btnPrimary: {
-		backgroundColor: Colors.PRIMARY,
+		backgroundColor: Colors.WARNING,
 		paddingHorizontal: 10,
 		paddingVertical: 5,
     borderRadius: 5,
