@@ -10,7 +10,6 @@ export const Home: React.FC<HomeProps> = ({ navigation }: any) => {
 
 	return (
 		<View style={styles.container}>
-			<Image style={styles.logo} source={require("../../assets/icon.png")} />
 			<Text>Open up App.tsx to start working on your app!</Text>
 			<Button title="Go to About" onPress={handlePress} />
 		</View>

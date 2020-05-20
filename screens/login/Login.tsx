@@ -6,40 +6,48 @@ import {
 	Image,
 	StyleSheet,
 	TouchableOpacity,
+	ImageBackground,
 } from "react-native";
 import Constants from "expo-constants";
+import {Colors, Typography} from '../../styles/index';
 
 interface LoginProps {}
 
-export const Login: React.FC<LoginProps> = ({}) => {
+export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 	const [value, onChangeText] = React.useState("Useless Placeholder");
 
-	return (
-		<View style={styles.container}>
-			<View style={styles.container}>
-				<Image style={styles.logo} source={require("../../assets/icon.png")} />
-			</View>
+	const handlePress = () => {
+		navigation.navigate("Register");
+	};
 
-			<View style={styles.paragraph}>
-				<Text>Login</Text>
+	return (
+		<ImageBackground
+			source={require("../../assets/images/bg.jpg")}
+			style={styles.container}
+		>
+			<View>
+				<Image style={styles.logo} source={require("../../assets/images/logo.png")} />
+
+				<Text style={styles.paragraph}>Login</Text>
+
+				<TextInput
+					style={styles.input}
+					onChangeText={(text) => onChangeText(text)}
+					value={value}
+				/>
+				<TextInput
+					style={styles.input}
+					onChangeText={(text) => onChangeText(text)}
+					value={value}
+				/>
+				<TouchableOpacity style={styles.btnPrimary} onPress={() => {}}>
+					<Text style={styles.btnPrimaryTxt}>Login</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.btnLink} onPress={handlePress}>
+					<Text style={styles.btnLinkTxt}>Register</Text>
+				</TouchableOpacity>
 			</View>
-			<TextInput
-				style={styles.input}
-				onChangeText={(text) => onChangeText(text)}
-				value={value}
-			/>
-			<TextInput
-				style={styles.input}
-				onChangeText={(text) => onChangeText(text)}
-				value={value}
-			/>
-			<TouchableOpacity style={styles.btnPrimary} onPress={() => {}}>
-				<Text style={styles.btnPrimaryTxt}>Login</Text>
-			</TouchableOpacity>
-			<TouchableOpacity style={styles.btnLink} onPress={() => {}}>
-				<Text style={styles.btnLinkTxt}>Forgot Password</Text>
-			</TouchableOpacity>
-		</View>
+		</ImageBackground>
 	);
 };
 
@@ -48,12 +56,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		paddingTop: Constants.statusBarHeight,
-		backgroundColor: "#ecf0f1",
-		padding: 40,
+		backgroundColor: "#6a4c93",
+		paddingVertical: 40,
+		paddingHorizontal: 50,
 	},
 	paragraph: {
 		marginVertical: 15,
-		fontSize: 24,
+		fontSize: 28,
+		fontFamily: Typography.FONT_FAMILY_BOLD,
+		color: "#fff",
 		fontWeight: "bold",
 		textAlign: "center",
 		textTransform: "uppercase",
@@ -71,28 +82,35 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	btnPrimary: {
-		backgroundColor: "#007aff",
+		backgroundColor: Colors.PRIMARY,
 		paddingHorizontal: 10,
 		paddingVertical: 5,
-		borderRadius: 5,
+    borderRadius: 5,
+    height: 40,
+    // width: "50%",
+    // alignSelf: "center"
 	},
 	btnLink: {
 		paddingHorizontal: 10,
 		marginTop: 15,
-		borderRadius: 5,
+    borderRadius: 5,
+    height: 40,
 	},
 	input: {
-		height: 35,
+		height: 40,
 		backgroundColor: "#fff",
 		borderColor: "#dbe0e2",
 		borderWidth: 1,
-		paddingHorizontal: 10,
+		paddingHorizontal: 20,
 		paddingVertical: 5,
 		borderRadius: 5,
 		marginBottom: 15,
 		color: "#666",
 	},
 	logo: {
-		height: 60,
+		display: "flex",
+		justifyContent: "center",
+		alignSelf: "center",
+		marginBottom: 20,
 	},
 });
