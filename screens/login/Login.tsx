@@ -9,7 +9,8 @@ import {
 	ImageBackground,
 } from "react-native";
 import Constants from "expo-constants";
-import {Colors, Typography} from '../../styles/index';
+import {Colors, Typography} from "../../styles/index";
+import API from "../../config/env";
 
 interface LoginProps {}
 
@@ -28,7 +29,7 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 			<View>
 				<Image style={styles.logo} source={require("../../assets/images/logo.png")} />
 
-				<Text style={styles.paragraph}>Login</Text>
+	<Text style={styles.paragraph}>Login {API.admin}</Text>
 
 				<TextInput
 					style={styles.input}
@@ -85,16 +86,16 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.WARNING,
 		paddingHorizontal: 10,
 		paddingVertical: 5,
-    borderRadius: 5,
-    height: 40,
-    // width: "50%",
-    // alignSelf: "center"
+		borderRadius: 5,
+		height: 40,
+		// width: "50%",
+		// alignSelf: "center"
 	},
 	btnLink: {
 		paddingHorizontal: 10,
 		marginTop: 15,
-    borderRadius: 5,
-    height: 40,
+		borderRadius: 5,
+		height: 40,
 	},
 	input: {
 		height: 40,

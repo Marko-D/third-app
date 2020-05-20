@@ -1,6 +1,6 @@
 import React, { Component, createContext } from "react";
 
-const defaultState = {};
+const defaultState: any = {};
 
 export const AuthContext = createContext(defaultState);
 
