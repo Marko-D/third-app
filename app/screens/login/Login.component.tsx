@@ -4,14 +4,13 @@ import {
 	TextInput,
 	View,
 	Image,
-	StyleSheet,
 	TouchableOpacity,
 	ImageBackground,
 	SafeAreaView
 } from "react-native";
-import Constants from "expo-constants";
-import { Colors, Typography } from "../../styles/index";
 import API from "../../config/env";
+import styles from './Login.component.style';
+
 
 interface LoginViewComponentProps {
   navigateToRegister: any,
@@ -57,66 +56,3 @@ export const LoginViewComponent: React.FC<LoginViewComponentProps> = (props: any
 		</ImageBackground>
 	);
 };
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "center",
-		paddingTop: Constants.statusBarHeight,
-		backgroundColor: "#6a4c93",
-		paddingVertical: 40,
-		paddingHorizontal: 50,
-	},
-	paragraph: {
-		marginVertical: 15,
-		fontSize: 28,
-		fontFamily: Typography.FONT_FAMILY_BOLD,
-		color: "#fff",
-		fontWeight: "bold",
-		textAlign: "center",
-		textTransform: "uppercase",
-	},
-	btnPrimaryTxt: {
-		fontSize: 16,
-		fontWeight: "400",
-		color: "#fff",
-		textAlign: "center",
-	},
-	btnLinkTxt: {
-		fontSize: 14,
-		fontWeight: "500",
-		color: "#666",
-		textAlign: "center",
-	},
-	btnPrimary: {
-		backgroundColor: Colors.WARNING,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
-		borderRadius: 5,
-		height: 40,
-		// width: "50%",
-		// alignSelf: "center"
-	},
-	btnLink: {
-		paddingHorizontal: 10,
-		marginTop: 15,
-		borderRadius: 5,
-		height: 40,
-	},
-	input: {
-		height: 40,
-		backgroundColor: "#fff",
-		borderColor: "#dbe0e2",
-		borderWidth: 1,
-		paddingHorizontal: 20,
-		paddingVertical: 5,
-		borderRadius: 5,
-		marginBottom: 15,
-		color: "#666",
-	},
-	logo: {
-		display: "flex",
-		justifyContent: "center",
-		alignSelf: "center",
-		marginBottom: 20,
-	},
-});

@@ -1,8 +1,9 @@
 import React, { useContext }  from "react";
-import { LoginViewComponent } from "./LoginView";
 import axios from "axios";
+
 import API from "../../config/env";
 import AuthService from "../../core/auth/AuthService";
+import { LoginViewComponent } from "./Login.component";
 import { AuthContext  } from "../../core/auth/context/AuthContext";
 import { AsyncStorageService } from "../../core/services/AsyncStorageService";
 import AuthHeader from "../../core/auth/AuthHeader";

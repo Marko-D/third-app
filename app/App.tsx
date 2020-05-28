@@ -2,7 +2,7 @@ import React from "react";
 import MainStack from "./routes/MainStack";
 import "./styles/index";
 import { useFonts } from '@use-expo/font';
-import { AppLoading } from 'expo';
+import { AppLoading, registerRootComponent } from 'expo';
 import { YellowBox } from 'react-native';
 // import { View, Text } from "react-native";
 
@@ -32,4 +32,4 @@ import { YellowBox } from 'react-native';
 	}
 	
 }
-export default App;
+export default registerRootComponent(App); 

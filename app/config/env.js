@@ -8,7 +8,7 @@
 
 
 // import { Platform } from "react-native"
-import active from "../active.env"
+import active from "../../active.env"
 
 const envs = {
   dev: {
