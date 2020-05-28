@@ -1,12 +1,18 @@
 import React from "react";
-import MainStackNavigator from "./routes/MainStackNavigator";
+import MainStack from "./routes/MainStack";
 import "./styles/index";
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
-import AuthContextProvider from "./context/AuthContext";
+import { YellowBox } from 'react-native';
 // import { View, Text } from "react-native";
 
  const App = () => {
+
+	// “Remote debugger is in a background tab” warning in React Native 
+	YellowBox.ignoreWarnings(['Remote debugger']);
+	console.ignoredYellowBox = ['Remote debugger'];
+
+
 	let [fontsLoaded] = useFonts({
     'Nunito-Regular': require('./assets/fonts/Nunito-Regular.ttf'),
     'Nunito-Bold': require('./assets/fonts/Nunito-Bold.ttf')
@@ -20,10 +26,8 @@ import AuthContextProvider from "./context/AuthContext";
 			// <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 			// 	<Text>Platform Default</Text>
 			// 	<Text style={{ fontFamily: 'Nunito-Bold', fontSize: 30 }}>Inter Black</Text>
-			// </View>
-			<AuthContextProvider>
-				<MainStackNavigator />
-			</AuthContextProvider>
+			// </View>		
+			<MainStack />
     );
 	}
 	

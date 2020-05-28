@@ -1,117 +1,137 @@
-import * as React from "react";
-import {
-	Text,
-	TextInput,
-	View,
-	Image,
-	StyleSheet,
-	TouchableOpacity,
-	ImageBackground,
-} from "react-native";
-import Constants from "expo-constants";
-import {Colors, Typography} from "../../styles/index";
+import React, { useContext }  from "react";
+import { LoginViewComponent } from "./LoginView";
+import axios from "axios";
 import API from "../../config/env";
+import AuthService from "../../core/auth/AuthService";
+import { AuthContext  } from "../../core/auth/context/AuthContext";
+import { AsyncStorageService } from "../../core/services/AsyncStorageService";
+import AuthHeader from "../../core/auth/AuthHeader";
+// import AsyncStorage from '@react-native-community/async-storage';
 
 interface LoginProps {}
-
+// interface User {
+// 	username: string;
+// 	password: string;
+// }
+// interface OptionsData {
+// 	method: any;
+// 	url: string;
+// 	data: User;
+// }
 export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
-	const [value, onChangeText] = React.useState("Useless Placeholder");
+	const {state, setState} = useContext<any>(AuthContext);
 
-	const handlePress = () => {
+	const navRegister = () => {
 		navigation.navigate("Register");
 	};
 
+	const handleLogin = () => {
+		let data = {
+			password: "P@ssw0rd",
+			username: "zorica.jankuloska@it-labs.com",
+		};
+
+		AuthService.login(data).then((response) => {
+			// console.log("AuthService.login-----------", response.data);
+			if (response.data.token) {
+				// AsyncStorageService.setItem("token", response.data.token);
+
+				let roles = response.data.payload.roles;
+				if (roles.length <= 0) {
+					// console.log("ima eden useraaaaaaaaaaaaa");
+				} else {
+					// console.log("ima poise useriiiiiiiiiiii");
+					// navigation.navigate("SelectRole");
+					let participantRole = roles.find(
+						(role) => role.name === "Participant"
+					);
+					setState(true)
+					console.log('---------------------state', state)
+					// console.log("participantRole-------------------", participantRole);
+					// console.log("AuthHeader-------------------", AuthHeader());
+					me(response.data.token);
+				}
+			}
+		});
+	};
+
+	 const me = async (token: string) => {
+		//  console.log('API.loginaaaaaaaaaaaaaaaa',`${API.login}me`)
+		let headers = {
+			"Authorization": `JWT ${token}`,
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json; charset=utf-8"
+		};
+		axios.get(`${API.login}me`, {headers}).then(res => {
+			// navigation.navigate("Home");
+			
+			console.log("auth/me-------------------", res);
+			// console.log("ME res.data.payload +++++++------------------", res.data.payload);
+			selectedRole(res.data.payload.id, token)
+		})
+		.catch((error) => {
+			// console.log("auth/me error", JSON.stringify(error));
+		});
+	}
+
+	const selectedRole = (userId: string, token: string) => {
+		// console.log('aaaaaaaaaaaaaaaaaaaaaaaaa',token)
+		let headers = {
+			"Authorization": `JWT ${token}`,
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json; charset=utf-8"
+		};
+		let data = {
+			roleId: "84768ee0-4695-41ae-a83b-7d32248eff57",
+			associateType: null
+		}
+		// console.log("${API.admin}users/${userId}/selectedRole", `${API.admin}users/${userId}/selectedRole`);
+
+		// axios.post(Helper.getUserAPI(), data, {
+		// 	headers: headers
+		// })
+
+
+		axios.post(`${API.admin}users/${userId}/selectedRole`, data, {headers}).then(async (response) => {
+			AsyncStorageService.setItem("token", response.data.payload.token);
+
+			
+			// navigation.navigate("Home");
+			// console.log("selectedRole-------------------", response);
+			
+			// AsyncStorage.getAllKeys((err, keys) => {
+			// 	AsyncStorage.multiGet(keys, (error, stores) => {
+			// 		stores.map((result, i, store) => {
+			// 			console.log('---------------',{ [store[i][0]]: store[i][1] });
+			// 			return true;
+			// 		});
+			// 	});
+			// });
+			
+			// console.log("AsyncStorage-------------------", await AsyncStorageService.getItem('token'));
+
+			// ConnectionGroupInfo(userId, response.data.payload.token)
+		})
+		.catch((error) => {
+			console.log("selectedRole error", JSON.stringify(error));
+		});
+	}
+
+	const ConnectionGroupInfo = (userid: string, token: string) => {
+		let headers = {
+			"Authorization": `JWT ${token}`,
+			"Accept": "application/json, text/plain, */*",
+			"Content-Type": "application/json; charset=utf-8"
+		};
+		// console.log('token+++++++++++++++++++++++++',token)
+		axios.get(`${API.admin}dashboard/${userid}/connectionGroupInfo`, {headers}).then(res => {
+			// console.log('connectionGroupInfo+++++++++++++++++++++++++',res)
+		}).catch((error) => {
+			// console.log("selectedRole error", JSON.stringify(error));
+		});
+	}
+
 	return (
-		<ImageBackground
-			source={require("../../assets/images/bg.jpg")}
-			style={styles.container}
-		>
-			<View>
-				<Image style={styles.logo} source={require("../../assets/images/logo.png")} />
-
-	<Text style={styles.paragraph}>Login {API.admin}</Text>
-
-				<TextInput
-					style={styles.input}
-					onChangeText={(text) => onChangeText(text)}
-					value={value}
-				/>
-				<TextInput
-					style={styles.input}
-					onChangeText={(text) => onChangeText(text)}
-					value={value}
-				/>
-				<TouchableOpacity style={styles.btnPrimary} onPress={() => {}}>
-					<Text style={styles.btnPrimaryTxt}>Login</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.btnLink} onPress={handlePress}>
-					<Text style={styles.btnLinkTxt}>Register</Text>
-				</TouchableOpacity>
-			</View>
-		</ImageBackground>
+		<LoginViewComponent title={state} login={handleLogin} navigateToRegister={navRegister} />
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "center",
-		paddingTop: Constants.statusBarHeight,
-		backgroundColor: "#6a4c93",
-		paddingVertical: 40,
-		paddingHorizontal: 50,
-	},
-	paragraph: {
-		marginVertical: 15,
-		fontSize: 28,
-		fontFamily: Typography.FONT_FAMILY_BOLD,
-		color: "#fff",
-		fontWeight: "bold",
-		textAlign: "center",
-		textTransform: "uppercase",
-	},
-	btnPrimaryTxt: {
-		fontSize: 16,
-		fontWeight: "400",
-		color: "#fff",
-		textAlign: "center",
-	},
-	btnLinkTxt: {
-		fontSize: 14,
-		fontWeight: "500",
-		color: "#666",
-		textAlign: "center",
-	},
-	btnPrimary: {
-		backgroundColor: Colors.WARNING,
-		paddingHorizontal: 10,
-		paddingVertical: 5,
-		borderRadius: 5,
-		height: 40,
-		// width: "50%",
-		// alignSelf: "center"
-	},
-	btnLink: {
-		paddingHorizontal: 10,
-		marginTop: 15,
-		borderRadius: 5,
-		height: 40,
-	},
-	input: {
-		height: 40,
-		backgroundColor: "#fff",
-		borderColor: "#dbe0e2",
-		borderWidth: 1,
-		paddingHorizontal: 20,
-		paddingVertical: 5,
-		borderRadius: 5,
-		marginBottom: 15,
-		color: "#666",
-	},
-	logo: {
-		display: "flex",
-		justifyContent: "center",
-		alignSelf: "center",
-		marginBottom: 20,
-	},
-});
