@@ -1,12 +1,12 @@
-import { LOGIN_SUCCESS, LOGOUT } from "../types";
+import * as actions from "../types";
 
 const AuthReducer = (state = null, action) => {
 	if (!action) return state;
 
 	switch (action.type) {
-		case LOGIN_SUCCESS:
+		case actions.LOGIN_SUCCESS:
 			return action.payload;
-		case LOGOUT:
+		case actions.LOGOUT:
 			return null;
 		default:
 			return state;

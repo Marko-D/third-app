@@ -13,6 +13,15 @@ const App = () => {
 	const store = configureStore();
 	const [loading, setLoadig] = useState(true);
 
+	// store.dispatch({
+	// 	type: 'LOGIN_SUBMIT',
+	// 	payload: {
+	// 			data: true
+	// 	}
+	// })
+
+	// console.log('store------------------------ ', store.getState())
+
 	// “Remote debugger is in a background tab” warning in React Native
 	YellowBox.ignoreWarnings(["Remote debugger"]);
 	console.ignoredYellowBox = ["Remote debugger"];

@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS } from "../types";
+import * as actions from "../types";
 
 const initialState = {};
 
@@ -6,7 +6,7 @@ const CurrentUserReducer = (state = initialState, action) => {
 	if (!action) return state;
 
 	switch (action.type) {
-		case LOGIN_SUCCESS:
+		case actions.LOGIN_SUCCESS:
 			return {
 				...state,
 				[action.payload.id]: action.payload,

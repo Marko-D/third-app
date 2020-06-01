@@ -9,7 +9,8 @@
     "set-dev": "shx echo \"export default 'dev';\"> active.env.js",
     "set-stage": "shx echo \"export default 'staging';\"> active.env.js",
     "set-qa": "shx echo \"export default 'qa';\"> active.env.js",
-    "set-release": "shx echo \"export default 'release';\"> active.env.js"
+    "set-release": "shx echo \"export default 'release';\"> active.env.js",
+    "devtools": "react-devtools"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.10.3",

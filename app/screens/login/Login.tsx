@@ -9,7 +9,7 @@ import { AsyncStorageService } from "../../core/services/AsyncStorageService";
 import AuthHeader from "../../core/auth/AuthHeader";
 // import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux'
-import { loginSubmit } from "./actions";
+import { loginSubmit, loginSuccess } from "./actions";
 
 interface LoginProps {}
 // interface User {
@@ -84,6 +84,7 @@ const Login: React.FC<LoginProps> = (props: any) => {
 		console.log("authenticateUser -------------------", payload);
 		props.authenticate(payload)
 		console.log("props -------------------", props);
+
 	}	
 
 
@@ -106,7 +107,7 @@ const Login: React.FC<LoginProps> = (props: any) => {
 
 
 		axios.post(`${API.admin}users/${userId}/selectedRole`, data, {headers}).then(async (response) => {
-			AsyncStorageService.setItem("token", response.data.payload.token);
+			await AsyncStorageService.setItem("token", response.data.payload.token);
 			authenticateUser(response.data.payload.token)
 			
 			// navigation.navigate("Home");
@@ -152,7 +153,7 @@ const Login: React.FC<LoginProps> = (props: any) => {
 const mapStateToProps = (state) => {
 	console.log('mapStateToProps ----------', state)
 	return {
-		auth: state.AuthReducer
+		auth: state.auth
 	}
 }
 
@@ -162,7 +163,7 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		authenticate: (token) => {
 			console.log('authenticate----------------',token);
-			dispatch(loginSubmit(token));
+			dispatch(loginSuccess(token));
 		}
 	}
 }
