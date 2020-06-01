@@ -64,6 +64,19 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		marginBottom: 20,
 	},
+	env: {
+		alignSelf: "center",
+		width: 40,
+		height: 30,
+		color: '#000',
+		fontSize: 20,
+		fontWeight: 'bold',
+		textAlign: "center",
+		textTransform: "uppercase",
+		lineHeight: 30,
+		backgroundColor: Colors.SUCCESS,
+		borderRadius: 50,
+	}
 });
 
 export default styles;

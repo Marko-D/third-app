@@ -8,17 +8,18 @@ import {
 	ImageBackground,
 	SafeAreaView
 } from "react-native";
-import API from "../../config/env";
-import styles from './Login.component.style';
+// import API from "../../config/env";
+import styles from './Login.style';
+import Environment from '../../../active.env'
 
 
-interface LoginViewComponentProps {
+interface LoginViewProps {
   navigateToRegister: any,
   login: any,
   title: any
 }
 
-export const LoginViewComponent: React.FC<LoginViewComponentProps> = (props: any) => {
+export const LoginView: React.FC<LoginViewProps> = (props: any) => {
   const [value, onChangeText] = React.useState("Useless Placeholder");
 	return (
 		<ImageBackground
@@ -31,7 +32,9 @@ export const LoginViewComponent: React.FC<LoginViewComponentProps> = (props: any
 					source={require("../../assets/images/logo.png")}
 				/>
 
-				<Text style={styles.paragraph}>Login {props.title} {API.admin}</Text>
+				<Text style={styles.env}>{Environment}</Text>
+
+				<Text style={styles.paragraph}>{props.title}</Text>
 
 				<TextInput
 					style={styles.input}

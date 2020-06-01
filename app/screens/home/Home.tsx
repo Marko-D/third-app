@@ -41,9 +41,9 @@ export const Home: React.FC<HomeProps> = ({ navigation }: any) => {
 
 
 	return (
-		<View style={styles.container}>
-			<Text>Open up App.tsx to start working on your app!</Text>
-			<Text>token {token}</Text>
+			<View style={styles.container}>
+			<Text style={styles.text}>TOKEN</Text>
+			<Text style={styles.token}>{token}</Text>
 			<Button title="Go to About" onPress={handlePress} />
 			<Button title="Clear AsyncStorage" onPress={handleClearAsync} />
 			<Button title="Logout" onPress={handleLogout} />
@@ -56,11 +56,22 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#fff",
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "center"	
 	},
 	logo: {
 		height: 128,
 		width: 128,
 		marginBottom: 30,
 	},
+	text: {
+		fontFamily: 'Nunito-Bold', 
+		fontSize: 30 
+	},
+	token: {
+		margin: 20,
+		padding: 20,
+		backgroundColor: '#e4e4e4',
+		borderColor: '#999',
+		borderWidth: 1
+	}
 });

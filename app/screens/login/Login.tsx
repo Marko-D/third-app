@@ -3,11 +3,13 @@ import axios from "axios";
 
 import API from "../../config/env";
 import AuthService from "../../core/auth/AuthService";
-import { LoginViewComponent } from "./Login.component";
+import { LoginView } from "./Login.view";
 import { AuthContext  } from "../../core/auth/context/AuthContext";
 import { AsyncStorageService } from "../../core/services/AsyncStorageService";
 import AuthHeader from "../../core/auth/AuthHeader";
 // import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux'
+import { loginSubmit } from "./actions";
 
 interface LoginProps {}
 // interface User {
@@ -19,21 +21,23 @@ interface LoginProps {}
 // 	url: string;
 // 	data: User;
 // }
-export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
-	const {state, setState} = useContext<any>(AuthContext);
+const Login: React.FC<LoginProps> = (props: any) => {
+	
+	// const {state, setState} = useContext<any>(AuthContext);
 
 	const navRegister = () => {
-		navigation.navigate("Register");
+		props.navigation.navigate("Register");
 	};
 
 	const handleLogin = () => {
+		console.log('Loging started...')
 		let data = {
 			password: "P@ssw0rd",
 			username: "zorica.jankuloska@it-labs.com",
 		};
 
 		AuthService.login(data).then((response) => {
-			// console.log("AuthService.login-----------", response.data);
+			console.log('Loging response...')
 			if (response.data.token) {
 				// AsyncStorageService.setItem("token", response.data.token);
 
@@ -43,13 +47,12 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 				} else {
 					// console.log("ima poise useriiiiiiiiiiii");
 					// navigation.navigate("SelectRole");
-					let participantRole = roles.find(
-						(role) => role.name === "Participant"
-					);
-					setState(true)
-					console.log('---------------------state', state)
-					// console.log("participantRole-------------------", participantRole);
-					// console.log("AuthHeader-------------------", AuthHeader());
+
+					// let participantRole = roles.find(
+					// 	(role) => role.name === "Participant"
+					// );
+
+					// setState(true)				
 					me(response.data.token);
 				}
 			}
@@ -57,6 +60,7 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 	};
 
 	 const me = async (token: string) => {
+		console.log('me started...')
 		//  console.log('API.loginaaaaaaaaaaaaaaaa',`${API.login}me`)
 		let headers = {
 			"Authorization": `JWT ${token}`,
@@ -66,8 +70,9 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 		axios.get(`${API.login}me`, {headers}).then(res => {
 			// navigation.navigate("Home");
 			
-			console.log("auth/me-------------------", res);
+			// console.log("auth/me-------------------", res);
 			// console.log("ME res.data.payload +++++++------------------", res.data.payload);
+			console.log('me response...')
 			selectedRole(res.data.payload.id, token)
 		})
 		.catch((error) => {
@@ -75,8 +80,15 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 		});
 	}
 
+	const authenticateUser = (payload) => {
+		console.log("authenticateUser -------------------", payload);
+		props.authenticate(payload)
+		console.log("props -------------------", props);
+	}	
+
+
 	const selectedRole = (userId: string, token: string) => {
-		// console.log('aaaaaaaaaaaaaaaaaaaaaaaaa',token)
+		console.log('selectedRole...')
 		let headers = {
 			"Authorization": `JWT ${token}`,
 			"Accept": "application/json, text/plain, */*",
@@ -95,7 +107,7 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 
 		axios.post(`${API.admin}users/${userId}/selectedRole`, data, {headers}).then(async (response) => {
 			AsyncStorageService.setItem("token", response.data.payload.token);
-
+			authenticateUser(response.data.payload.token)
 			
 			// navigation.navigate("Home");
 			// console.log("selectedRole-------------------", response);
@@ -114,7 +126,7 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 			// ConnectionGroupInfo(userId, response.data.payload.token)
 		})
 		.catch((error) => {
-			console.log("selectedRole error", JSON.stringify(error));
+			// console.log("selectedRole error", JSON.stringify(error));
 		});
 	}
 
@@ -133,6 +145,29 @@ export const Login: React.FC<LoginProps> = ({ navigation }: any) => {
 	}
 
 	return (
-		<LoginViewComponent title={state} login={handleLogin} navigateToRegister={navRegister} />
+		<LoginView title='Titleee Login' login={handleLogin} navigateToRegister={navRegister} />
 	);
 };
+
+const mapStateToProps = (state) => {
+	console.log('mapStateToProps ----------', state)
+	return {
+		auth: state.AuthReducer
+	}
+}
+
+const mapDispatchToProps = (dispatch) => {
+	console.log('mapDispatchToProps ----------', dispatch)
+
+	return {
+		authenticate: (token) => {
+			console.log('authenticate----------------',token);
+			dispatch(loginSubmit(token));
+		}
+	}
+}
+
+// for redux connect to work this is where we export the component not on function declaration 
+// and also components must start with capital letter
+// https://stackoverflow.com/questions/44474031/mapstatetoprops-not-getting-called-at-all
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
