@@ -1,15 +1,17 @@
 import * as actions from "../types";
 
-const initialState = {};
+const initialState = {
+	currentUser: null
+};
 
 const CurrentUserReducer = (state = initialState, action) => {
 	if (!action) return state;
 
 	switch (action.type) {
-		case actions.LOGIN_SUCCESS:
+		case actions.STORE_USER:
 			return {
 				...state,
-				[action.payload.id]: action.payload,
+				currentUser: action.payload,
 			};
 		default:
 			return state;

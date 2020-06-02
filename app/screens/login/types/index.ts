@@ -8,3 +8,5 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 // triggered to logout the user
 export const LOGOUT = 'LOGOUT';
+// triggered when the login has succeded
+export const STORE_USER = 'STORE_USER';

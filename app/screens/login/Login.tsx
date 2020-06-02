@@ -9,7 +9,7 @@ import { AsyncStorageService } from "../../core/services/AsyncStorageService";
 import AuthHeader from "../../core/auth/AuthHeader";
 // import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux'
-import { loginSubmit, loginSuccess } from "./actions";
+import { loginSubmit, loginSuccess, storeUser } from "./actions";
 
 interface LoginProps {}
 // interface User {
@@ -74,6 +74,9 @@ const Login: React.FC<LoginProps> = (props: any) => {
 			// console.log("ME res.data.payload +++++++------------------", res.data.payload);
 			console.log('me response...')
 			selectedRole(res.data.payload.id, token)
+
+			console.log("meeeee-------------------", res.data.payload);
+			storeUser(res.data.payload)
 		})
 		.catch((error) => {
 			// console.log("auth/me error", JSON.stringify(error));
@@ -81,10 +84,15 @@ const Login: React.FC<LoginProps> = (props: any) => {
 	}
 
 	const authenticateUser = (payload) => {
-		console.log("authenticateUser -------------------", payload);
+		// console.log("authenticateUser -------------------", payload);
 		props.authenticate(payload)
-		console.log("props -------------------", props);
+		// console.log("props -------------------", props);
+	}	
 
+	const storeUser = (payload) => {
+		// console.log("storeUser -------------------", payload);
+		props.user(payload)
+		// console.log("props -------------------", props);
 	}	
 
 
@@ -109,7 +117,7 @@ const Login: React.FC<LoginProps> = (props: any) => {
 		axios.post(`${API.admin}users/${userId}/selectedRole`, data, {headers}).then(async (response) => {
 			await AsyncStorageService.setItem("token", response.data.payload.token);
 			authenticateUser(response.data.payload.token)
-			
+	
 			// navigation.navigate("Home");
 			// console.log("selectedRole-------------------", response);
 			
@@ -153,7 +161,8 @@ const Login: React.FC<LoginProps> = (props: any) => {
 const mapStateToProps = (state) => {
 	console.log('mapStateToProps ----------', state)
 	return {
-		auth: state.auth
+		auth: state.auth,
+		currentUser: state.currentUser
 	}
 }
 
@@ -162,8 +171,12 @@ const mapDispatchToProps = (dispatch) => {
 
 	return {
 		authenticate: (token) => {
-			console.log('authenticate----------------',token);
+			console.log('authenticate----------------', token);
 			dispatch(loginSuccess(token));
+		},
+		user: (user) => {
+			console.log('user----------------', user);
+			dispatch(storeUser(user))
 		}
 	}
 }
