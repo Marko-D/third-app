@@ -46,3 +46,12 @@ export const storeUser = (user) => {
 		payload: user,
 	};
 };
+
+// triggered to logout the user
+export const removeUser = (user) => {
+	return {
+		type: types.REMOVE_USER,
+		payload: user,
+	};
+};
+

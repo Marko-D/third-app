@@ -22,6 +22,17 @@ const App = () => {
 
 	// console.log('store------------------------ ', store.getState())
 
+	store.subscribe(() => {
+		// When state will be updated(in our case, when items will be fetched), 
+		// we will update local component state and force component to rerender 
+		// with new data.
+
+		 store.getState()
+			
+		
+		console.log('APP store------------------------ ', store.getState());
+	});
+
 	// “Remote debugger is in a background tab” warning in React Native
 	YellowBox.ignoreWarnings(["Remote debugger"]);
 	console.ignoredYellowBox = ["Remote debugger"];
@@ -38,15 +49,15 @@ const App = () => {
 			let hasToken = await AsyncStorageService.getItem("token")
 			loadingApp(false);
 
-			console.log("APP LOADED ===============================");
-			console.log("USER LOGGED IN", hasToken);
+			console.log("APP LOADED...");
+			console.log("USER LOGGED IN...", !!hasToken);
 		};
-		// Execute the created function directly
-
+		
 		// Simulate api call. Delete when developing 
-		// setTimeout(() => {
+		setTimeout(() => {
+			// Execute the created function directly
 			onAppLoad();
-		// }, 5000);
+		}, 5000);
 	}, []);
 
 	const loadingApp = (state) => setLoadig(state);

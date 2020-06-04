@@ -10,3 +10,5 @@ export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const LOGOUT = 'LOGOUT';
 // triggered when the login has succeded
 export const STORE_USER = 'STORE_USER';
+// triggered when logout the user
+export const REMOVE_USER = 'REMOVE_USER';

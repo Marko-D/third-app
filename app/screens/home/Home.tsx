@@ -1,21 +1,32 @@
 import React, {useContext, useEffect, useState} from "react";
 import { StyleSheet, Text, View, Image, Button } from "react-native";
-import { AuthContext } from "../../core/auth/context/AuthContext";
 import { AsyncStorageService } from "../../core/services/AsyncStorageService";
+import { useDispatch, useSelector } from "react-redux"
+import * as actions from "../login/actions";
 
 interface HomeProps {}
 
-export const Home: React.FC<HomeProps> = ({ navigation }: any) => {
-	const {state, setState} = useContext<any>(AuthContext);
+export const Home: React.FC<HomeProps> = (props: any) => {
+
 	const [token, setToken] = useState<any>('');
 	const [clearAsync, setClearAsync] = useState(token)
+
+	// REDUX without mapStateToProps and mapDispatchToProps
+	const auth = useSelector((state) => {
+		console.log('homeeee', state.LoginReducers.auth)
+		return state.LoginReducers.auth
+	})
+	const dispatch = useDispatch()
+
+
 	
 	const handlePress = () => {
-		navigation.navigate("About");
+		props.navigation.navigate("About");
 	};
-
+	
 	const handleLogout = () => {
-		setState(false)
+		dispatch(actions.logout());
+		dispatch(actions.removeUser({}));
 	};
 
 	const getAsyncStorage = async () => {
@@ -27,7 +38,7 @@ export const Home: React.FC<HomeProps> = ({ navigation }: any) => {
 
 	const clearStorage = async () => {
 		await AsyncStorageService.clearAll()
-		setToken(token)
+		setToken(null)
 	}
 
 	const handleClearAsync = async () => {
@@ -42,7 +53,7 @@ export const Home: React.FC<HomeProps> = ({ navigation }: any) => {
 
 	return (
 			<View style={styles.container}>
-			<Text style={styles.text}>TOKEN</Text>
+			<Text style={styles.text}>TOKEN {!!auth ? 'true' : 'false'}</Text>
 			<Text style={styles.token}>{token}</Text>
 			<Button title="Go to About" onPress={handlePress} />
 			<Button title="Clear AsyncStorage" onPress={handleClearAsync} />

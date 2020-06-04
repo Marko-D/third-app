@@ -39,29 +39,24 @@ const Login: React.FC<LoginProps> = (props: any) => {
 		AuthService.login(data).then((response) => {
 			console.log('Loging response...')
 			if (response.data.token) {
-				// AsyncStorageService.setItem("token", response.data.token);
-
-				let roles = response.data.payload.roles;
-				if (roles.length <= 0) {
+				// let roles = response.data.payload.roles;
+				// if (roles.length <= 0) {
 					// console.log("ima eden useraaaaaaaaaaaaa");
-				} else {
+				// } else {
 					// console.log("ima poise useriiiiiiiiiiii");
-					// navigation.navigate("SelectRole");
-
 					// let participantRole = roles.find(
 					// 	(role) => role.name === "Participant"
 					// );
 
 					// setState(true)				
 					me(response.data.token);
-				}
+				// }
 			}
 		});
 	};
 
-	 const me = async (token: string) => {
+	const me = async (token: string) => {
 		console.log('me started...')
-		//  console.log('API.loginaaaaaaaaaaaaaaaa',`${API.login}me`)
 		let headers = {
 			"Authorization": `JWT ${token}`,
 			"Accept": "application/json, text/plain, */*",
@@ -69,13 +64,8 @@ const Login: React.FC<LoginProps> = (props: any) => {
 		};
 		axios.get(`${API.login}me`, {headers}).then(res => {
 			// navigation.navigate("Home");
-			
-			// console.log("auth/me-------------------", res);
-			// console.log("ME res.data.payload +++++++------------------", res.data.payload);
 			console.log('me response...')
 			selectedRole(res.data.payload.id, token)
-
-			console.log("meeeee-------------------", res.data.payload);
 			storeUser(res.data.payload)
 		})
 		.catch((error) => {
@@ -84,42 +74,31 @@ const Login: React.FC<LoginProps> = (props: any) => {
 	}
 
 	const authenticateUser = (payload) => {
-		// console.log("authenticateUser -------------------", payload);
 		props.authenticate(payload)
-		// console.log("props -------------------", props);
 	}	
 
 	const storeUser = (payload) => {
-		// console.log("storeUser -------------------", payload);
 		props.user(payload)
-		// console.log("props -------------------", props);
 	}	
-
 
 	const selectedRole = (userId: string, token: string) => {
 		console.log('selectedRole...')
+
 		let headers = {
 			"Authorization": `JWT ${token}`,
 			"Accept": "application/json, text/plain, */*",
 			"Content-Type": "application/json; charset=utf-8"
 		};
+
 		let data = {
 			roleId: "84768ee0-4695-41ae-a83b-7d32248eff57",
 			associateType: null
 		}
-		// console.log("${API.admin}users/${userId}/selectedRole", `${API.admin}users/${userId}/selectedRole`);
-
-		// axios.post(Helper.getUserAPI(), data, {
-		// 	headers: headers
-		// })
-
 
 		axios.post(`${API.admin}users/${userId}/selectedRole`, data, {headers}).then(async (response) => {
+			console.log('selectedRole response...')
 			await AsyncStorageService.setItem("token", response.data.payload.token);
 			authenticateUser(response.data.payload.token)
-	
-			// navigation.navigate("Home");
-			// console.log("selectedRole-------------------", response);
 			
 			// AsyncStorage.getAllKeys((err, keys) => {
 			// 	AsyncStorage.multiGet(keys, (error, stores) => {
@@ -128,9 +107,7 @@ const Login: React.FC<LoginProps> = (props: any) => {
 			// 			return true;
 			// 		});
 			// 	});
-			// });
-			
-			// console.log("AsyncStorage-------------------", await AsyncStorageService.getItem('token'));
+			// });		
 
 			// ConnectionGroupInfo(userId, response.data.payload.token)
 		})
@@ -139,19 +116,19 @@ const Login: React.FC<LoginProps> = (props: any) => {
 		});
 	}
 
-	const ConnectionGroupInfo = (userid: string, token: string) => {
-		let headers = {
-			"Authorization": `JWT ${token}`,
-			"Accept": "application/json, text/plain, */*",
-			"Content-Type": "application/json; charset=utf-8"
-		};
-		// console.log('token+++++++++++++++++++++++++',token)
-		axios.get(`${API.admin}dashboard/${userid}/connectionGroupInfo`, {headers}).then(res => {
-			// console.log('connectionGroupInfo+++++++++++++++++++++++++',res)
-		}).catch((error) => {
-			// console.log("selectedRole error", JSON.stringify(error));
-		});
-	}
+	// const ConnectionGroupInfo = (userid: string, token: string) => {
+	// 	let headers = {
+	// 		"Authorization": `JWT ${token}`,
+	// 		"Accept": "application/json, text/plain, */*",
+	// 		"Content-Type": "application/json; charset=utf-8"
+	// 	};
+	// 	// console.log('token+++++++++++++++++++++++++',token)
+	// 	axios.get(`${API.admin}dashboard/${userid}/connectionGroupInfo`, {headers}).then(res => {
+	// 		// console.log('connectionGroupInfo+++++++++++++++++++++++++',res)
+	// 	}).catch((error) => {
+	// 		// console.log("selectedRole error", JSON.stringify(error));
+	// 	});
+	// }
 
 	return (
 		<LoginView title='Titleee Login' login={handleLogin} navigateToRegister={navRegister} />

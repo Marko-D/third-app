@@ -1,28 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { PrivateStack } from "./PrivateStack";
 import { PublicStack } from "./PublicStack";
-import { AuthContext } from "../core/auth/context/AuthContext";
+import { PrivateStack } from "./PrivateStack";
 import configureStore from "../redux";
 // import { ActivityIndicator, Text } from "react-native";
+import { connect } from 'react-redux'
 
-export const MainStack: React.FC<any> = () => {
-	const [state, setState] = useState();
-	const store = configureStore();
-
-	store.subscribe(() => {
-		console.log('MAIN STACK store------------------------ ', store.getState())
-	})
-
+const MainStack: React.FC<any> = (props) => {
 	return (
-		<AuthContext.Provider value={{state, setState}}>
 			<NavigationContainer>
 				{/* <ActivityIndicator /> */}
-				{/* <Text>{state}</Text> */}
-				{!state ? <PrivateStack /> : <PublicStack />}
+				{!!props.auth ? <PrivateStack /> : <PublicStack />}
 			</NavigationContainer>
-		</AuthContext.Provider>
 	);
 };
 
-export default MainStack;
+const mapStateToProps = (state) => {
+	console.log('MAIN STACK-------------------', state.LoginReducers);
+	return {
+		auth: state.LoginReducers.auth,
+		currentUser: state.LoginReducers.currentUser
+	}
+}
+
+export default connect(mapStateToProps, null)(MainStack)

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState} from "react";
 import {
 	Text,
 	TextInput,
@@ -8,16 +8,17 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import Constants from "expo-constants";
+import { connect } from 'react-redux'
 
 interface RegisterProps {}
 
-export const Register: React.FC<RegisterProps> = ({navigation}: any) => {
-  const [value, onChangeText] = React.useState("Useless Placeholder");
-  
+const Register: React.FC<RegisterProps> = (props: any) => {
+	const [value, onChangeText] = useState("Useless Placeholder");
+	const [storeState, setStoreState] = useState()
 	const handlePress = () => {
-		navigation.goBack();
-  };
-  
+		props.navigation.goBack();
+	};
+	  
 	return (
 		<View style={styles.container}>
 			<View style={styles.container}>
@@ -25,7 +26,7 @@ export const Register: React.FC<RegisterProps> = ({navigation}: any) => {
 			</View>
 
 			<View style={styles.paragraph}>
-				<Text>Register</Text>
+			<Text>Register {props.currentUser.name}</Text>
 			</View>
 			<TextInput
 				style={styles.input}
@@ -43,6 +44,15 @@ export const Register: React.FC<RegisterProps> = ({navigation}: any) => {
 		</View>
 	);
 };
+
+const mapStateToProps = (state) => {
+	console.log('REGISTER-------------------', state.LoginReducers.currentUser);
+	return {
+		currentUser: state.LoginReducers.currentUser
+	}
+}
+
+export default connect(mapStateToProps, null)(Register)
 
 const styles = StyleSheet.create({
 	container: {
